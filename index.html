@@ -50,6 +50,11 @@ button:focus-visible, a:focus-visible{ outline:2px solid var(--accent); outline-
 .site-nav a:hover{ color:var(--fg); }
 .site-nav a:hover::after{ transform:scaleX(1); }
 .site-nav .btn{ margin:0; }
+@media (max-width:560px){
+  .site-nav{ gap:14px; }
+  .site-nav a:not(.btn){ display:none; }
+  .site-logo{ font-size:15px; }
+}
 
 /* hero */
 .hero-grid{ display:grid; grid-template-columns:1.15fr .85fr; gap:56px; align-items:center; padding:72px 0 64px; }
