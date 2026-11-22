@@ -1,0 +1,517 @@
+<title>Sunday Ogaje</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* layout: photo-led hero with staggered entrance; alternating two-column case studies, each tagged with its product's own brand color; scroll-reveal throughout */
+:root{
+  --bg:#f6f7f5; --surface:#ffffff; --fg:#13171a; --muted:#5c6b66; --accent:#1f6f52; --border:#dfe3e0;
+  --radius:10px;
+  --font-display:'Space Grotesk', sans-serif; --font-body:'Inter', sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e100d; --surface:#181b17; --fg:#eef0ec; --muted:#98a39c; --accent:#4bb98f; --border:#2a2f28;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e100d; --surface:#181b17; --fg:#eef0ec; --muted:#98a39c; --accent:#4bb98f; --border:#2a2f28;
+  color-scheme: dark;
+}
+
+*{box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--fg); font-family:var(--font-body);
+  padding-left:max(16px, env(safe-area-inset-left,0px)); padding-right:max(16px, env(safe-area-inset-right,0px));
+}
+img{max-width:100%; display:block;}
+h1,h2,h3{font-family:var(--font-display); text-wrap:balance; margin:0;}
+p{margin:0; line-height:1.65;}
+a{color:inherit;}
+button{ font:inherit; color:inherit; }
+button:focus-visible, a:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+.wrap{ max-width:1180px; margin:0 auto; }
+.band{ width:100%; }
+.band-surface{ background:var(--surface); }
+
+/* header */
+.site-header{ background:color-mix(in srgb, var(--bg) 85%, transparent); backdrop-filter:blur(8px); border-bottom:1px solid var(--border); position:sticky; top:env(safe-area-inset-top,0px); z-index:9; }
+.site-header-inner{ display:flex; align-items:center; justify-content:space-between; padding:16px 0; }
+.site-logo{ font-family:var(--font-display); font-weight:600; font-size:17px; text-decoration:none; }
+.site-nav{ display:flex; align-items:center; gap:28px; }
+.site-nav a{ font-size:14px; text-decoration:none; color:var(--muted); position:relative; }
+.site-nav a::after{ content:""; position:absolute; left:0; right:0; bottom:-4px; height:1px; background:var(--accent); transform:scaleX(0); transform-origin:left; transition:transform .25s ease; }
+.site-nav a:hover{ color:var(--fg); }
+.site-nav a:hover::after{ transform:scaleX(1); }
+.site-nav .btn{ margin:0; }
+
+/* hero */
+.hero-grid{ display:grid; grid-template-columns:1.15fr .85fr; gap:56px; align-items:center; padding:72px 0 64px; }
+@media (max-width:860px){ .hero-grid{ grid-template-columns:1fr; padding:40px 0; gap:40px; } }
+.hero-text{ display:flex; flex-direction:column; gap:16px; }
+.badge{ display:inline-flex; align-items:center; gap:7px; font-size:12.5px; font-weight:600; color:var(--accent); background:color-mix(in srgb, var(--accent) 12%, var(--surface)); border:1px solid color-mix(in srgb, var(--accent) 30%, var(--border)); padding:6px 12px; border-radius:999px; width:fit-content; }
+.badge .dot{ width:7px; height:7px; border-radius:50%; background:var(--accent); display:inline-block; }
+.eyebrow{ font-size:13px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+.hero-text h1{ font-size:clamp(34px,4.6vw,56px); line-height:1.04; }
+.hero-text p.role{ font-size:19px; color:var(--accent); font-weight:600; font-family:var(--font-display); }
+.hero-text p.bio{ max-width:54ch; color:var(--muted); font-size:16.5px; }
+.cta-row{ display:flex; gap:12px; flex-wrap:wrap; margin-top:6px; }
+.btn{ font-weight:600; font-size:14px; padding:11px 20px; border-radius:999px; border:1px solid var(--border); cursor:pointer; text-decoration:none; display:inline-block; transition:transform .15s ease, background .15s ease; }
+.btn:hover{ transform:translateY(-1px); }
+.btn.primary{ background:var(--accent); color:var(--bg); border-color:var(--accent); }
+.btn.ghost{ background:transparent; color:var(--fg); }
+
+.hero-photo-wrap{ position:relative; display:flex; justify-content:center; }
+.hero-blob{ position:absolute; width:86%; aspect-ratio:1; background:color-mix(in srgb, var(--accent) 22%, transparent); border-radius:48% 52% 55% 45% / 45% 48% 52% 55%; filter:blur(2px); z-index:0; }
+@media (prefers-reduced-motion: no-preference){
+  .hero-blob{ animation:blobMorph 9s ease-in-out infinite, spinSlow 24s linear infinite; }
+}
+.hero-photo{ position:relative; z-index:1; width:78%; aspect-ratio:3/3.4; border-radius:50% 50% 46% 46% / 55% 55% 45% 45%; overflow:hidden; border:3px solid var(--surface); box-shadow:0 24px 50px -24px rgba(0,0,0,.35); transition:transform .25s ease; transform-style:preserve-3d; will-change:transform; }
+.hero-photo img{ width:100%; height:100%; object-fit:cover; }
+
+/* on-load hero animation */
+@media (prefers-reduced-motion: no-preference){
+  .hero-text > *, .hero-photo-wrap{ animation:fadeUp .7s ease both; }
+  .hero-text > *:nth-child(1){ animation-delay:.02s; }
+  .hero-text > *:nth-child(2){ animation-delay:.1s; }
+  .hero-text > *:nth-child(3){ animation-delay:.18s; }
+  .hero-text > *:nth-child(4){ animation-delay:.26s; }
+  .hero-text > *:nth-child(5){ animation-delay:.34s; }
+  .hero-photo-wrap{ animation-delay:.2s; }
+}
+@keyframes fadeUp{ from{ opacity:0; transform:translateY(18px); } to{ opacity:1; transform:none; } }
+
+/* cursor glow + scroll progress */
+.cursor-glow{ position:fixed; left:0; top:0; width:440px; height:440px; margin-left:-220px; margin-top:-220px; border-radius:50%; background:radial-gradient(circle, color-mix(in srgb, var(--accent) 38%, transparent) 0%, transparent 70%); pointer-events:none; z-index:1; opacity:0; transition:opacity .5s ease; filter:blur(6px); will-change:transform; }
+.cursor-glow.active{ opacity:1; }
+.scroll-progress{ position:fixed; top:0; left:0; height:3px; width:0%; background:var(--accent); z-index:100; transition:width .1s linear; }
+
+/* floating decorative shapes */
+.float-shape{ position:absolute; border-radius:50%; filter:blur(2px); pointer-events:none; z-index:0; opacity:.5; }
+@media (prefers-reduced-motion: no-preference){
+  .float-shape{ animation:drift ease-in-out infinite alternate; }
+}
+@keyframes drift{ 0%{ transform:translate(0,0) rotate(0deg); } 100%{ transform:translate(26px,-34px) rotate(10deg); } }
+@keyframes blobMorph{ 0%,100%{ border-radius:48% 52% 55% 45% / 45% 48% 52% 55%; } 33%{ border-radius:58% 42% 48% 52% / 52% 58% 42% 48%; } 66%{ border-radius:42% 58% 52% 48% / 48% 42% 58% 52%; } }
+@keyframes spinSlow{ from{ transform:rotate(0deg); } to{ transform:rotate(360deg); } }
+
+/* content/hero sit above floating shapes */
+.hero-grid, .hero-photo-wrap, section, .site-header-inner{ position:relative; z-index:1; }
+
+section{ padding:56px 0; }
+
+.reveal{ transform:translateY(48px) scale(.98); }
+@media (prefers-reduced-motion: no-preference){
+  .reveal{ transition:transform .85s cubic-bezier(.16,.84,.44,1); }
+}
+.reveal.is-visible{ transform:none; }
+
+.section-head{ display:flex; align-items:baseline; justify-content:space-between; gap:16px; margin-bottom:40px; flex-wrap:wrap; }
+.section-head h2{ font-size:14px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+.section-head .count{ font-size:13px; color:var(--muted); }
+
+/* project case blocks */
+.case{ --proj:#1f6f52; position:relative; border-radius:3px; padding-top:32px; margin-top:28px; }
+.case:first-child{ margin-top:0; }
+.case::before{ content:""; position:absolute; top:0; left:0; height:3px; width:0; background:var(--proj); transition:width 1s cubic-bezier(.16,.84,.44,1); }
+.case.is-visible::before{ width:100%; }
+.case-grid{ display:grid; grid-template-columns:.92fr 1.08fr; gap:44px; align-items:start; }
+.case.reverse .case-grid{ direction:rtl; }
+.case.reverse .case-grid > *{ direction:ltr; }
+@media (max-width:900px){ .case-grid{ grid-template-columns:1fr; } .case.reverse .case-grid{ direction:ltr; } }
+
+.case-tag{ display:inline-block; font-size:12px; font-weight:600; letter-spacing:.03em; text-transform:uppercase; color:var(--proj); background:color-mix(in srgb, var(--proj) 14%, var(--surface)); padding:5px 11px; border-radius:999px; margin-bottom:14px; }
+.case-info h3{ font-size:25px; margin-bottom:12px; }
+.case-info .case-sub{ color:var(--muted); font-size:15px; max-width:52ch; }
+.meta-row{ display:flex; gap:8px; flex-wrap:wrap; margin-top:18px; }
+.chip{ font-size:12px; padding:4px 10px; border-radius:999px; border:1px solid var(--border); color:var(--muted); }
+
+.case-visual{ display:flex; flex-direction:column; gap:14px; }
+.shot{ border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; background:var(--surface); box-shadow:0 18px 40px -26px rgba(0,0,0,.35); transition:transform .25s ease, box-shadow .25s ease; perspective:600px; will-change:transform; }
+.shot:hover{ box-shadow:0 26px 50px -22px rgba(0,0,0,.42); }
+.shot img{ width:100%; display:block; transition:transform .25s ease; }
+.shot-caption{ font-size:12.5px; color:var(--muted); padding:9px 2px 0; }
+.extra-shots{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+@media (max-width:620px){ .extra-shots{ grid-template-columns:1fr; } }
+
+.phone-row{ display:flex; gap:14px; overflow-x:auto; padding:4px 2px 10px; }
+.phone-shot{ flex:0 0 auto; width:150px; }
+.phone-shot img{ border:1px solid var(--border); border-radius:14px; box-shadow:0 14px 30px -20px rgba(0,0,0,.35); }
+.phone-shot .shot-caption{ font-size:11.5px; text-align:center; padding-top:8px; }
+
+.more-card{ border:1px solid var(--border); border-radius:var(--radius); padding:22px 24px; color:var(--muted); font-size:14px; max-width:640px; display:flex; align-items:center; justify-content:space-between; gap:16px; text-decoration:none; transition:transform .2s ease, border-color .2s ease; }
+.more-card:hover{ transform:translateY(-3px); border-color:var(--accent); }
+.more-card b{ color:var(--fg); font-family:var(--font-display); font-weight:500; font-size:16px; }
+.more-card .arrow{ color:var(--accent); font-weight:600; font-size:14px; white-space:nowrap; }
+
+.about-grid{ display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start; }
+@media (max-width:760px){ .about-grid{ grid-template-columns:1fr; } }
+.marquee{ overflow:hidden; margin-top:18px; -webkit-mask-image:linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); mask-image:linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+.marquee-track{ display:flex; gap:10px; width:max-content; }
+@media (prefers-reduced-motion: no-preference){
+  .marquee-track{ animation:marquee 16s linear infinite; }
+  .marquee:hover .marquee-track{ animation-play-state:paused; }
+}
+@keyframes marquee{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+.tag{ font-size:13px; padding:6px 13px; border-radius:999px; background:var(--surface); border:1px solid var(--border); white-space:nowrap; flex:0 0 auto; }
+
+.contact-row{ display:flex; flex-direction:column; gap:12px; align-items:flex-start; }
+.copy-btn{ display:inline-flex; gap:8px; align-items:center; font-size:15.5px; padding:12px 16px; border:1px solid var(--border); border-radius:999px; background:var(--surface); cursor:pointer; transition:transform .15s ease; }
+.copy-btn:hover{ transform:translateY(-1px); }
+.copy-btn small{ color:var(--muted); font-size:12px; }
+
+footer{ padding:32px 0 56px; color:var(--muted); font-size:13px; border-top:1px solid var(--border); }
+</style>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap">
+
+<div class="scroll-progress" id="scrollProgress"></div>
+<div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+
+<header class="site-header">
+  <div class="wrap site-header-inner">
+    <a href="#" class="site-logo">Sunday Ogaje</a>
+    <nav class="site-nav">
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact" class="btn primary" style="padding:8px 16px;">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<div class="band" style="position:relative; overflow:hidden;">
+  <div class="float-shape" aria-hidden="true" style="width:120px; height:120px; top:12%; left:4%; background:color-mix(in srgb, var(--accent) 30%, transparent); animation-duration:11s;"></div>
+  <div class="float-shape" aria-hidden="true" style="width:70px; height:70px; top:70%; left:10%; background:color-mix(in srgb, #5b4bda 30%, transparent); animation-duration:8s; animation-delay:1s;"></div>
+  <div class="float-shape" aria-hidden="true" style="width:90px; height:90px; top:20%; right:6%; background:color-mix(in srgb, #e8491d 25%, transparent); animation-duration:13s; animation-delay:.5s;"></div>
+  <div class="wrap hero-grid">
+    <div class="hero-text">
+      <div class="badge"><span class="dot"></span>Open to product design work</div>
+      <h1>Sunday Abba Ogaje</h1>
+      <p class="role">Product Designer</p>
+      <p class="bio">I design for complex, high-stakes systems — government oversight tools, internal dashboards, fintech and multi-agency platforms — and turn them into interfaces people can actually use without a training manual.</p>
+      <div class="cta-row">
+        <a href="#work" class="btn primary">View work</a>
+        <a href="#contact" class="btn ghost">Get in touch</a>
+      </div>
+    </div>
+    <div class="hero-photo-wrap">
+      <div class="hero-blob" aria-hidden="true"></div>
+      <div class="hero-photo"><img src="images/profile-headshot.png" alt="Portrait of Sunday Abba Ogaje"></div>
+    </div>
+  </div>
+</div>
+
+<div class="band band-surface" style="position:relative; overflow:hidden;">
+  <div class="float-shape" aria-hidden="true" style="width:160px; height:160px; top:6%; right:4%; background:color-mix(in srgb, #4338ca 22%, transparent); animation-duration:14s;"></div>
+  <div class="float-shape" aria-hidden="true" style="width:80px; height:80px; top:55%; left:2%; background:color-mix(in srgb, #1f9e52 25%, transparent); animation-duration:9s; animation-delay:.8s;"></div>
+<div class="wrap">
+
+  <section id="work">
+    <div class="section-head reveal">
+      <h2>Selected work</h2>
+      <span class="count">5 projects</span>
+    </div>
+
+    <div class="case reveal" style="--proj:#1f6f52;">
+      <div class="case-grid">
+        <div class="case-info">
+          <span class="case-tag">Government · Web dashboard</span>
+          <h3>CDCU — Central Delivery Coordinating Unit</h3>
+          <p class="case-sub">The Office of the Secretary to the Government of the Federation needed one place to see whether government projects across dozens of agencies were actually getting delivered. I designed a monitoring dashboard that tracks every deliverable nationwide — by region, by agency, by status — replacing scattered reports with one source of truth for completed, ongoing, overdue, and abandoned projects.</p>
+          <div class="meta-row">
+            <span class="chip">Solo — client project</span>
+            <span class="chip">In active use</span>
+          </div>
+        </div>
+        <div class="case-visual">
+          <div class="shot">
+            <img src="images/cdcu-dashboard.png" alt="CDCU national dashboard showing total projects tracked, completion status, and a map of project activity by Nigerian state">
+            <div class="shot-caption">National overview — project totals, regional map, and sentiment tracking.</div>
+          </div>
+          <div class="extra-shots">
+            <div class="shot">
+              <img src="images/cdcu-detail.png" alt="CDCU project detail view showing KPI timeline, budget disbursement, and project team members">
+              <div class="shot-caption">Project detail — KPI timeline and budget.</div>
+            </div>
+            <div class="shot">
+              <img src="images/cdcu-agency.png" alt="CDCU agency profile page showing agency information, contact details, and project history">
+              <div class="shot-caption">Agency profile — contact &amp; history.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="case reverse reveal" style="--proj:#5b4bda;">
+      <div class="case-grid">
+        <div class="case-info">
+          <span class="case-tag">EdTech · Marketing website</span>
+          <h3>Learnora — Learning Management System</h3>
+          <p class="case-sub">A concept marketing site for an LMS where anyone can create, sell, and manage online courses. I designed the full page to carry a visitor from the value proposition through feature proof to a final sign-up moment — course authoring, virtual classrooms, quizzes, certification, and white-label options, all surfaced as reasons to trust the platform with their first course.</p>
+          <div class="meta-row">
+            <span class="chip">Solo — client project</span>
+            <span class="chip">Design concept</span>
+          </div>
+        </div>
+        <div class="case-visual">
+          <div class="shot">
+            <img src="images/learnora-hero.png" alt="Learnora landing page hero section with headline Teach and Share your Knowledge with Anyone, Anywhere, and a trusted-by banner">
+            <div class="shot-caption">Hero — value proposition and social proof above the fold.</div>
+          </div>
+          <div class="shot">
+            <img src="images/learnora-features.png" alt="Learnora features grid showing nine feature cards">
+            <div class="shot-caption">Feature grid — nine capabilities, scannable at a glance.</div>
+          </div>
+          <div class="shot">
+            <img src="images/learnora-cta.png" alt="Learnora closing call to action banner reading Ready to start teaching">
+            <div class="shot-caption">Closing CTA — the final nudge to sign up.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="case reveal" style="--proj:#4338ca;">
+      <div class="case-grid">
+        <div class="case-info">
+          <span class="case-tag">Fintech · Web dashboard</span>
+          <h3>CoopPoint — Cooperative Management Platform</h3>
+          <p class="case-sub">Savings cooperatives run on manual registers and WhatsApp updates — members can't see their own standing, and cooperative heads can't see the whole picture at once. I designed CoopPoint to give a cooperative head one dashboard for contributions, savings, loans, and withdrawals, plus a clear approval flow for new member registrations, from application through KYC review to accept/reject.</p>
+          <div class="meta-row">
+            <span class="chip">Solo — client project</span>
+            <span class="chip">Design concept</span>
+          </div>
+        </div>
+        <div class="case-visual">
+          <div class="shot">
+            <img src="images/cooppoint-dashboard.png" alt="CoopPoint cooperative overview dashboard showing total contributions, savings balance, loan requests, savings growth chart, financial distribution, and withdrawal analytics">
+            <div class="shot-caption">Cooperative overview — contributions, savings, loans, withdrawals.</div>
+          </div>
+          <div class="extra-shots">
+            <div class="shot">
+              <img src="images/cooppoint-members.png" alt="CoopPoint registered members table with status filters, search, and per-member savings and status columns">
+              <div class="shot-caption">Registered members — status &amp; savings.</div>
+            </div>
+            <div class="shot">
+              <img src="images/cooppoint-profile.png" alt="CoopPoint member profile and registration review screen with KYC tabs, bank information, and approve or reject application actions">
+              <div class="shot-caption">Member review — KYC &amp; decision.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="case reverse reveal" style="--proj:#e8491d;">
+      <div class="case-grid">
+        <div class="case-info">
+          <span class="case-tag">EdTech · Web app + marketing</span>
+          <h3>Adept for Education — School Management System</h3>
+          <p class="case-sub">Schools juggle fee collection, student records, and reporting across spreadsheets and manual bank reconciliation. I designed Adept, a SaaS platform that assigns each student a dedicated bank account, lets parents pay fees with instant receipts, and gives school admins one dashboard for revenue, outstanding payments, and student records — covering the marketing site, auth, dashboard, and core data views.</p>
+          <div class="meta-row">
+            <span class="chip">Solo — client project</span>
+            <span class="chip">Design concept</span>
+          </div>
+        </div>
+        <div class="case-visual">
+          <div class="shot">
+            <img src="images/adept-hero.png" alt="Adept for Education marketing site hero section with headline Aims to streamline the school fee payment process, next to a dashboard preview">
+            <div class="shot-caption">Marketing site — the value proposition, built around the dashboard it sells.</div>
+          </div>
+          <div class="shot">
+            <img src="images/adept-dashboard.png" alt="Adept school dashboard showing academic session, term progress, expected and generated revenue, outstanding payments, and a financial report chart by class">
+            <div class="shot-caption">School dashboard — revenue and term progress.</div>
+          </div>
+          <div class="extra-shots">
+            <div class="shot">
+              <img src="images/adept-login.png" alt="Adept login screen with email and password fields next to an illustration and onboarding copy about registering and customizing a school">
+              <div class="shot-caption">Auth with onboarding context.</div>
+            </div>
+            <div class="shot">
+              <img src="images/adept-students.png" alt="Adept student list table with class and category filters, search, and columns for student, parent, and account details">
+              <div class="shot-caption">Student records, searchable &amp; filterable.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="case reveal" style="--proj:#1f9e52;">
+      <div class="case-grid">
+        <div class="case-info">
+          <span class="case-tag">Fintech · Mobile app</span>
+          <h3>BOA — Bank of Agriculture mobile app</h3>
+          <p class="case-sub">A fintech mobile app for Bank of Agriculture customers to bank entirely from their phone: send and receive money, pay bills, manage cards, and apply for and repay loans — built around the everyday realities of agricultural customers who need fast, trustworthy banking without a branch visit.</p>
+          <div class="meta-row">
+            <span class="chip">Solo — client project</span>
+            <span class="chip">Design concept</span>
+          </div>
+        </div>
+        <div class="case-visual">
+          <div class="phone-row">
+            <div class="phone-shot"><img src="images/boa-splash.png" alt="BOA app welcome screen"><div class="shot-caption">Welcome</div></div>
+            <div class="phone-shot"><img src="images/boa-onboarding.png" alt="BOA onboarding screen"><div class="shot-caption">Onboarding</div></div>
+            <div class="phone-shot"><img src="images/boa-signin.png" alt="BOA sign in screen"><div class="shot-caption">Sign in</div></div>
+            <div class="phone-shot"><img src="images/boa-home.png" alt="BOA home screen"><div class="shot-caption">Home</div></div>
+            <div class="phone-shot"><img src="images/boa-loan.png" alt="BOA loan screen"><div class="shot-caption">Loans</div></div>
+            <div class="phone-shot"><img src="images/boa-cards.png" alt="BOA cards empty state"><div class="shot-caption">Cards</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+</div>
+</div>
+
+<div class="band">
+<div class="wrap">
+
+  <section class="reveal">
+    <div class="section-head"><h2>Also building</h2></div>
+    <a class="more-card" href="https://sunnyogaje.github.io/portfolio/" target="_blank" rel="noopener">
+      <span><b>Full-stack developer</b><br>HTML, CSS, JavaScript, React, Node.js, PHP, and more.</span>
+      <span class="arrow">View dev portfolio &rarr;</span>
+    </a>
+  </section>
+
+</div>
+</div>
+
+<div class="band band-surface">
+<div class="wrap">
+
+  <section id="about" class="reveal">
+    <div class="section-head"><h2>About</h2></div>
+    <div class="about-grid">
+      <p class="case-sub" style="font-size:16.5px;">Product designer focused on making dense, high-stakes systems legible — the kind of tools where getting the information hierarchy wrong costs someone a real decision. Comfortable working solo across the full process, from research through to shipped, polished UI, usually as the only designer on a client engagement.</p>
+      <div class="marquee">
+        <div class="marquee-track">
+          <span class="tag">Dashboard design</span>
+          <span class="tag">Design systems</span>
+          <span class="tag">Data visualization</span>
+          <span class="tag">User research</span>
+          <span class="tag">Figma</span>
+          <span class="tag">Prototyping</span>
+          <span class="tag">Dashboard design</span>
+          <span class="tag">Design systems</span>
+          <span class="tag">Data visualization</span>
+          <span class="tag">User research</span>
+          <span class="tag">Figma</span>
+          <span class="tag">Prototyping</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+</div>
+
+<div class="band">
+<div class="wrap">
+
+  <section id="contact" class="reveal">
+    <div class="section-head"><h2>Contact</h2></div>
+    <div class="contact-row">
+      <button class="copy-btn" data-copy="sunnyogaje@gmail.com">sunnyogaje@gmail.com <small>(click to copy)</small></button>
+      <button class="copy-btn" data-copy="08127121186">08127121186 <small>(click to copy)</small></button>
+    </div>
+  </section>
+
+  <footer>Draft — not final copy. &copy; Sunday Abba Ogaje</footer>
+
+</div>
+</div>
+
+<script>
+(function(){
+  document.querySelectorAll('.copy-btn[data-copy]').forEach(function(copyBtn){
+    copyBtn.addEventListener('click', function(){
+      var text = copyBtn.getAttribute('data-copy');
+      function fallback(){
+        var r = document.createRange(); r.selectNodeContents(copyBtn);
+        var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+      }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).catch(fallback);
+      } else { fallback(); }
+    });
+  });
+
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var canHover = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  /* scroll-triggered reveal (transform only — content stays visible, never opacity:0) */
+  var reveals = document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window) || reduceMotion){
+    reveals.forEach(function(el){ el.classList.add('is-visible'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold:0.12, rootMargin:'0px 0px -60px 0px' });
+    reveals.forEach(function(el){ io.observe(el); });
+  }
+
+  /* scroll progress bar */
+  var progress = document.getElementById('scrollProgress');
+  function updateProgress(){
+    var h = document.documentElement;
+    var scrolled = h.scrollTop;
+    var max = h.scrollHeight - h.clientHeight;
+    progress.style.width = (max > 0 ? (scrolled / max) * 100 : 0) + '%';
+  }
+  window.addEventListener('scroll', function(){ requestAnimationFrame(updateProgress); }, { passive:true });
+  updateProgress();
+
+  if(canHover && !reduceMotion){
+    /* cursor glow, lerped toward pointer for a floaty follow */
+    var glow = document.getElementById('cursorGlow');
+    var gx = window.innerWidth/2, gy = window.innerHeight/2, tx = gx, ty = gy;
+    window.addEventListener('mousemove', function(e){
+      tx = e.clientX; ty = e.clientY;
+      glow.classList.add('active');
+    });
+    document.addEventListener('mouseleave', function(){ glow.classList.remove('active'); });
+    (function loop(){
+      gx += (tx - gx) * 0.08;
+      gy += (ty - gy) * 0.08;
+      glow.style.transform = 'translate(' + gx + 'px,' + gy + 'px)';
+      requestAnimationFrame(loop);
+    })();
+
+    /* 3D tilt on hero photo and every screenshot */
+    function addTilt(el, maxDeg, lift){
+      el.addEventListener('mousemove', function(e){
+        var r = el.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width - 0.5;
+        var py = (e.clientY - r.top) / r.height - 0.5;
+        var target = el.querySelector('img') || el;
+        target.style.transform = 'perspective(700px) rotateX(' + (py * -maxDeg) + 'deg) rotateY(' + (px * maxDeg) + 'deg) scale(1.04)';
+        if(lift) el.style.transform = 'translateY(-6px)';
+      });
+      el.addEventListener('mouseleave', function(){
+        var target = el.querySelector('img') || el;
+        target.style.transform = '';
+        if(lift) el.style.transform = '';
+      });
+    }
+    document.querySelectorAll('.shot').forEach(function(el){ addTilt(el, 8, true); });
+    addTilt(document.querySelector('.hero-photo'), 10, false);
+
+    /* magnetic buttons */
+    document.querySelectorAll('.btn, .copy-btn').forEach(function(btn){
+      btn.addEventListener('mousemove', function(e){
+        var r = btn.getBoundingClientRect();
+        var mx = (e.clientX - r.left - r.width/2) * 0.3;
+        var my = (e.clientY - r.top - r.height/2) * 0.3;
+        btn.style.transform = 'translate(' + mx + 'px,' + my + 'px)';
+      });
+      btn.addEventListener('mouseleave', function(){ btn.style.transform = ''; });
+    });
+  }
+})();
+</script>
